@@ -6,7 +6,6 @@ def error_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is not None:
-
         if response.status_code == 400:
             for error in response.data:
                 if response.data[error] == [
@@ -17,7 +16,7 @@ def error_handler(exc, context):
                     response.data[error] = 'Поле обязательно для заполнения'
 
         if response.status_code == 401:
-            response.data['detail'] = 'Не предоставлены учетные данные'
+            response.data['detail'] = 'Ошибка предоставления данных'
 
         if response.status_code == 403:
             response.data[
