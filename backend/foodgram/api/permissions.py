@@ -1,10 +1,12 @@
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework import permissions
 
 
-class AdminOwnerGuestPermissions(BasePermission):
-    message = "Недостаточно прав для выполнения действия"
+class AdminOwnerGuestPermissions(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        return (request.method in SAFE_METHODS
-                or obj.author == request.user
-                or request.user.is_superuser)
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user and request.user.is_authenticated:
+            return (request.user.is_superuser
+                    or obj.author == request.user)
+        return False

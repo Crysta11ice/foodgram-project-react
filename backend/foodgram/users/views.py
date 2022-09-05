@@ -10,7 +10,7 @@ from .models import Follow, User
 from .serializers import FollowListSerializer, FollowSerializer, UserSerializer
 
 
-class CustomUserViewSet(UserViewSet):
+class UserViewSet(UserViewSet):
     pagination_class = FoodgramPaginator
 
     @action(
@@ -18,30 +18,12 @@ class CustomUserViewSet(UserViewSet):
         methods=['GET'],
         permission_classes=(IsAuthenticated, )
     )
-    def users(self, request):
+    def user(self, request):
         serializer = UserSerializer(
             super().get_queryset(), many=True, context={
                 'request': request
             }
         )
-        return self.get_paginated_response(serializer.data)
-
-    @action(
-        detail=False,
-        methods=['GET'],
-        permission_classes=(IsAuthenticated, )
-    )
-    def follow_list(self, request, pk=None):
-        follow_list = self.paginate_queryset(
-            User.objects.filter(following__user=request.user)
-        )
-
-        serializer = FollowListSerializer(
-            follow_list, many=True, context={
-                'request': request
-            }
-        )
-
         return self.get_paginated_response(serializer.data)
 
     @action(
@@ -71,3 +53,21 @@ class CustomUserViewSet(UserViewSet):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(
+        detail=False,
+        methods=['GET'],
+        permission_classes=(IsAuthenticated, )
+    )
+    def follow_list(self, request, pk=None):
+        follow_list = self.paginate_queryset(
+            User.objects.filter(following__user=request.user)
+        )
+
+        serializer = FollowListSerializer(
+            follow_list, many=True, context={
+                'request': request
+            }
+        )
+
+        return self.get_paginated_response(serializer.data)

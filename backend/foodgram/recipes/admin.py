@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (FavoriteRecipe, Ingredient, IngredientsAmount, Recipe,
+from .models import (Favorite, Ingredient, IngredientsAmount, Recipe,
                      ShoppingCart, Tag)
 
 
@@ -18,20 +18,20 @@ class IngredientsAmountInLine(admin.TabularInline):
 
 
 @admin.register(Recipe)
-class RecipeAdmin(admin.ModelAdmin):
+class RecipesAdmin(admin.ModelAdmin):
     list_display = ('name', 'author')
-    readonly_fields = ('number_additions_to_favorites',)
+    readonly_fields = ('add_to_favorites',)
     list_filter = ('author', 'name', 'tags')
     list_per_page = 20
     inlines = [IngredientsAmountInLine]
     empty_value_display = '-пусто-'
 
-    def number_additions_to_favorites(self, obj):
+    def add_to_favorites(self, obj):
         return obj.favorite.count()
 
 
 @admin.register(Ingredient)
-class IngredientAdmin(admin.ModelAdmin):
+class IngredientsAdmin(admin.ModelAdmin):
     list_display = ('name', 'unit')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
@@ -45,13 +45,13 @@ class ShoppingCartAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagsAdmin(admin.ModelAdmin):
     list_display = ('name', 'color')
     empty_value_display = '-пусто-'
 
 
-@admin.register(FavoriteRecipe)
-class FavoriteRecipeAdmin(admin.ModelAdmin):
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
     list_filter = ('user', 'recipe')
     empty_value_display = '-пусто-'

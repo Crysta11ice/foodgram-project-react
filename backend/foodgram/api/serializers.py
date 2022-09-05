@@ -1,5 +1,5 @@
-from recipes.models import (FavoriteRecipe, Ingredient, IngredientsAmount,
-                            Recipe, ShoppingCart, Tag)
+from recipes.models import (Favorite, Ingredient, IngredientsAmount, Recipe,
+                            ShoppingCart, Tag)
 from rest_framework import serializers
 from users.serializers import UserSerializer
 
@@ -72,7 +72,7 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     def get_is_favorited(self, recipe):
         if self.context.get('request').user.is_anonymous:
             return False
-        return FavoriteRecipe.objects.filter(
+        return Favorite.objects.filter(
             user=self.context.get('request').user,
             recipe=recipe
         ).exists()
@@ -139,7 +139,7 @@ class RecipePostSerializer(serializers.ModelSerializer):
             ingredient_id = ingredient['id']
             if ingredient_id in ingredients_list:
                 raise serializers.ValidationError({
-                    'ingredient': 'Повторяются ингредиенты!'
+                    'ingredient': 'Ингредиент должен быть уникален'
                 })
             ingredients_list.append(ingredient_id)
         return data
@@ -150,18 +150,18 @@ class RecipePostSerializer(serializers.ModelSerializer):
         return data
 
 
-class FavoriteRecipesSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FavoriteRecipe
+        model = Favorite
         fields = ('user', 'recipe')
 
     def validate(self, data):
-        if FavoriteRecipe.objects.filter(
+        if Favorite.objects.filter(
                 user=self.context.get('request').user,
                 recipe=data['recipe']
         ).exists():
             raise serializers.ValidationError({
-                'status': 'Уже добавлен'
+                'status': 'Рецепт уже в избранном'
             })
         return data
 
@@ -188,7 +188,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
                 user=self.context['request'].user,
                 recipe=data['recipe']
         ):
-            raise serializers.ValidationError('Уже добавлен')
+            raise serializers.ValidationError('Рецепт уже в корзине')
         return data
 
     def to_representation(self, instance):
