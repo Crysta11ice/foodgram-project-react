@@ -59,8 +59,8 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'id', 'tags', 'author', 'ingredients', 'is_favorited',
-            'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time'
+            'id', 'name', 'author', 'ingredients', 'text', 'image',
+            'tags', 'is_favorited', 'is_in_shopping_cart', 'cooking_time'
         )
 
     def get_ingredients(self, recipe):
@@ -84,11 +84,6 @@ class RecipeGetSerializer(serializers.ModelSerializer):
             user=self.context.get('request').user,
             recipe=recipe
         ).exists()
-
-    def to_representation(self, obj):
-        data = super().to_representation(obj)
-        data["image"] = obj.image.url
-        return data
 
 
 class RecipePostSerializer(serializers.ModelSerializer):
@@ -144,11 +139,6 @@ class RecipePostSerializer(serializers.ModelSerializer):
             ingredients_list.append(ingredient_id)
         return data
 
-    def to_representation(self, obj):
-        data = super().to_representation(obj)
-        data["image"] = obj.image.url
-        return data
-
 
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -164,12 +154,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
                 'status': 'Рецепт уже в избранном'
             })
         return data
-
-    def to_representation(self, instance):
-        return RecipeViewSerializer(
-            instance.recipe,
-            context={'request': self.context.get('request')}
-        ).data
 
 
 class RecipeViewSerializer(serializers.ModelSerializer):
@@ -190,9 +174,3 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError('Рецепт уже в корзине')
         return data
-
-    def to_representation(self, instance):
-        return RecipeViewSerializer(
-            instance.recipe,
-            context={'request': self.context.get('request')}
-        ).data
