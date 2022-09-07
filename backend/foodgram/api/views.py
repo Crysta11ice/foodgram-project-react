@@ -18,7 +18,7 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all().order_by('-id')
+    queryset = Recipe.objects.all()
     permission_classes = (AdminOwnerGuestPermissions,)
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipesFilter
@@ -49,7 +49,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=['POST', 'DELETE'],
+        methods=('POST', 'DELETE',),
         permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk):
@@ -62,7 +62,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=['POST', 'DELETE'],
+        methods=('POST', 'DELETE',),
         permission_classes=(IsAuthenticated,)
     )
     def shopping_cart(self, request, pk):
@@ -75,11 +75,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['GET'],
+        methods=('GET',),
         permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request, pk=None):
-        shopping_cart = ['']
+        shopping_cart = []
         ingredients = IngredientsAmount.objects.filter(
             recipe__user_shopping_cart__user=request.user.id
         ).values(
@@ -108,7 +108,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Ingredient.objects.all().order_by('name')
+    queryset = Ingredient.objects.all()
     permission_classes = (AllowAny, )
     serializer_class = IngredientSerializer
     filter_backends = (IngredientFilter,)

@@ -20,6 +20,7 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -90,6 +91,7 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+        ordering = ('-id',)
 
     def __str__(self):
         return self.name
@@ -119,8 +121,8 @@ class IngredientsAmount(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Единица Измерения'
-        verbose_name_plural = 'Единицы Измерения'
+        verbose_name = 'Количество ингредиента'
+        verbose_name_plural = 'Количество ингредиентов'
         constraints = (
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],

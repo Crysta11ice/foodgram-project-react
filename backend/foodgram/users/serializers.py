@@ -36,9 +36,16 @@ class UserCreateSerializer(UserCreateSerializer):
 
 
 class FollowListSerializer(serializers.ModelSerializer):
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.SerializerMethodField()
-    is_following = serializers.SerializerMethodField(read_only=True)
+    recipes = serializers.SerializerMethodField(
+        method_name='get_recipes'
+    )
+    recipes_count = serializers.SerializerMethodField(
+        method_name='get_recipes_count'
+    )
+    is_following = serializers.SerializerMethodField(
+        method_name='get_is_following',
+        read_only=True
+    )
 
     class Meta:
         model = User
