@@ -88,7 +88,8 @@ class FollowSerializer(serializers.ModelSerializer):
     def validate(self, data):
         get_object_or_404(User, username=data['following'])
 
-        if self.context['request'].user == data['following']:
+        request = self.context.get('request')
+        if request.user == data['following']:
             raise serializers.ValidationError('Подписка на себя запрещена')
 
         if Follow.objects.filter(

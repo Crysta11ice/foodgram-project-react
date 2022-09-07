@@ -4,14 +4,18 @@ from users.models import User
 
 
 class Ingredient(models.Model):
+
     name = models.CharField(
         'Название',
         max_length=200,
     )
+
     unit = models.CharField(
         'Единица измерения',
         max_length=200,
     )
+
+    models.UniqueConstraint(fields=['name', 'unit'], name='unique_ingr_pair')
 
     class Meta:
         verbose_name = 'Ингредиент'
@@ -177,4 +181,4 @@ class ShoppingCart(models.Model):
         )
 
     def __str__(self):
-        return f'{self.name} , {self.recipe}'
+        return f'{self.recipe.name}'
