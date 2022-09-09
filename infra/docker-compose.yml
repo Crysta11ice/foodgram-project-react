@@ -10,7 +10,8 @@ services:
       - /var/lib/postgresql/data/
     env_file:
       - ./.env
-  web:
+
+  backend:
     image: imperfectblue/foodgram:latest
     restart: always
     volumes:
@@ -20,6 +21,13 @@ services:
       - db
     env_file:
       - ./.env
+
+  frontend:
+    image: imperfectblue/foodgram_frontend
+    volumes:
+      - ../frontend:/app/result_build/
+    depends_on:
+      - backend
 
   nginx:
     image: nginx:1.21.3-alpine
@@ -32,7 +40,8 @@ services:
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
     depends_on:
-      - web
+      - backend
+      - frontend
 
 
 volumes:
