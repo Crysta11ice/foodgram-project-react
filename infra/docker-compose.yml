@@ -12,7 +12,7 @@ services:
       - ./.env
 
   backend:
-    image: imperfectblue/foodgram:latest
+    image: imperfectblue/foodgram_backend
     restart: always
     volumes:
       - static_value:/app/static/
