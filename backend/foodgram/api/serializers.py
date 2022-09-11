@@ -84,6 +84,11 @@ class RecipeGetSerializer(serializers.ModelSerializer):
             recipe=recipe
         ).exists()
 
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["image"] = obj.image.url
+        return data
+
 
 class RecipePostSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
@@ -151,6 +156,11 @@ class RecipePostSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'cooking_time': 'Время приготовления должно быть больше 0'
             })
+        return data
+
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["image"] = obj.image.url
         return data
 
 
