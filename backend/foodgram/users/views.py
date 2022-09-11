@@ -31,7 +31,7 @@ class UserViewSet(UserViewSet):
         methods=['POST', 'DELETE'],
         permission_classes=(IsAuthenticated,)
     )
-    def follow(self, request, id):
+    def subscribe(self, request, id):
         if request.method != 'POST':
             follow = get_object_or_404(
                 Follow,
@@ -59,7 +59,7 @@ class UserViewSet(UserViewSet):
         methods=['GET'],
         permission_classes=(IsAuthenticated, )
     )
-    def follow_list(self, request, pk=None):
+    def subscriptions(self, request, pk=None):
         follow_list = self.paginate_queryset(
             User.objects.filter(following__user=request.user)
         )
