@@ -58,18 +58,18 @@ class FollowListSerializer(serializers.ModelSerializer):
         return Recipe.objects.filter(author=following).count()
 
     def get_recipes(self, following):
-        request = self.context.get('request')
-        recipes_limit = request.get('recipes_limit')
+        queryset = self.context.get('request')
+        recipes_limit = queryset.query_params.get('recipes_limit')
 
         if not recipes_limit:
             return RecipeFollowingSerializer(
                 following.author.all(),
-                many=True, context={'request': request}
+                many=True, context={'request': queryset}
             ).data
 
         return RecipeFollowingSerializer(
             following.author.all()[:int(recipes_limit)], many=True,
-            context={'request': request}
+            context={'request': queryset}
         ).data
 
     def get_is_following(self, following):
