@@ -15,4 +15,4 @@ class Command(BaseCommand):
                 name, unit = row
                 Ingredient.objects.get_or_create(
                     name=name,
-                    unit=unit)
+                    measurement_unit=unit)
