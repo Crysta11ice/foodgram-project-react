@@ -1,4 +1,5 @@
 from api.pagination import FoodgramPaginator
+from api.permissions import AdminOwnerGuestPermissions
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
@@ -12,19 +13,9 @@ from .serializers import FollowListSerializer, FollowSerializer, UserSerializer
 
 class UserViewSet(UserViewSet):
     pagination_class = FoodgramPaginator
-
-    @action(
-        detail=False,
-        methods=['GET'],
-        permission_classes=(IsAuthenticated, )
-    )
-    def user(self, request):
-        serializer = UserSerializer(
-            super().get_queryset(), many=True, context={
-                'request': request
-            }
-        )
-        return self.get_paginated_response(serializer.data)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = AdminOwnerGuestPermissions
 
     @action(
         detail=True,
