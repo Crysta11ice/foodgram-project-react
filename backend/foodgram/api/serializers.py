@@ -8,7 +8,7 @@ from users.serializers import UserSerializer
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ('id', 'name', 'unit')
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -19,14 +19,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 class IngredientsAmountGetSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='ingredient.name', read_only=True)
-    unit = serializers.CharField(
-        source='ingredient.unit', read_only=True
+    measurement_unit = serializers.CharField(
+        source='ingredient.measurement_unit', read_only=True
     )
     id = serializers.IntegerField(source='ingredient.id', read_only=True)
 
     class Meta:
         model = IngredientsAmount
-        fields = ('id', 'name', 'unit', 'amount')
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class IngredientsAmountPostSerializer(serializers.ModelSerializer):

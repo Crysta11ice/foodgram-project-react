@@ -32,7 +32,7 @@ class RecipesAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'unit')
+    list_display = ('name', 'measurement_unit')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
