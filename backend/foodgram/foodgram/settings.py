@@ -12,7 +12,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['51.250.83.13', 'localhost', 'foodgramhelper.ddnsking.com', 'backend:8000']
+ALLOWED_HOSTS = ['51.250.83.13', 'localhost', 'foodgramhelper.ddnsking.com', 'backend']
 
 # Application definition
 INSTALLED_APPS = [
