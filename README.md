@@ -13,13 +13,34 @@ Foodgram — это продуктовый помощник: сайт, на ко
 - создавать и скачивать сводный список продуктов, соответствующих выбранным рецептам.
 
 ## Сайт
-[![Foodgram](http://project-foodgram.ddns.net/)](http://project-foodgram.ddns.net/)
-
+[![Foodgram](http://foodgramhelper.ddnsking.com/)](http://foodgramhelper.ddnsking.com/)
 
 ## Самостоятельный запуск проекта
------
-
-
+1. Скачать проект на локальный пк
+```
+git clone https://github.com/Crysta11ice/foodgram-project-react
+```
+2. Скачать и установить Docker:
+https://www.docker.com/
+3. Запустить docker-compose:
+```
+cd foodgram-project-react/infra
+docker-compose up -d --build
+```
+4. Применить миграции:
+```
+docker-compose exec backend python manage.py migrate
+```
+5. Создать суперпользователя:
+```
+docker-compose exec backend python manage.py createsuperuser
+```
+6. Загрузить ингредиенты и файлы статики:
+```
+sudo docker-compose exec backend python manage.py ingr_import
+sudo docker-compose exec backend python manage.py collectstatic --no-input
+```
+7. Готово!
 
 ## Автор проекта
-[Влад](https://github.com/Crysta11ice) — Python разработка
+[Crysta11ice](https://github.com/Crysta11ice) — Backend разработка, деплой.
